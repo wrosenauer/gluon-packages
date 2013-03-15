@@ -8,23 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nodewatcher
-PKG_VERSION:=2013-02-13
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=git://freifunk-ol.de/ffol/software/nodewatcher.git
-PKG_SOURCE:=/
-PKG_SOURCE_VERSION:=HEAD
-PKG_SOURCE_SUBDIR:=/
+PKG_VERSION:=0.0
+PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_SOURCE:=$(PKG_NAME).tar.gz
+PKG_SOURCE_URL:=http://dev.freifunk-ol.de/packages
+PKG_MD5SUM:=d92ad620c41261a45a46e18bfdf139e1
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/nodewatcher
   SECTION:=utilities
   CATEGORY:=Utilities
-  TITLE:=Tool to collect system information of routers running openwrt and print or store them into a file
-  DEPENDS:=+libuci
-  URL:=http://git.freifunk-ol.de/index.php?p=ffol%2Fsoftware%2Fnodewatcher.git&a=summary
+  TITLE:=Freifunk Oldenburg Nodewatcher
+  URL:=http://freifunk-ol.de
+  DEPENDS:=+libuci +ip
 endef
 
 define Build/InstallDev
