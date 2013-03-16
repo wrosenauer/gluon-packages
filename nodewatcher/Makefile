@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nodewatcher
-PKG_VERSION:=0.0
-PKG_RELEASE:=1
-
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_VERSION:=2013-02-13
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=git://freifunk-ol.de/ffol/software/nodewatcher.git
 PKG_SOURCE:=$(PKG_NAME).tar.gz
-PKG_SOURCE_URL:=http://dev.freifunk-ol.de/packages
-PKG_MD5SUM:=d92ad620c41261a45a46e18bfdf139e1
+PKG_SOURCE_VERSION:=HEAD
+PKG_SOURCE_SUBDIR:=/
+
+PKG_BUILD_DIR:=$(BUILD_DIR)
 
 include $(INCLUDE_DIR)/package.mk
 
