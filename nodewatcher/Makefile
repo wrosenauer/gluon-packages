@@ -13,9 +13,9 @@ PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://freifunk-ol.de/ffol/software/nodewatcher.git
 PKG_SOURCE:=$(PKG_NAME).tar.gz
 PKG_SOURCE_VERSION:=HEAD
-PKG_SOURCE_SUBDIR:=/
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)
 
-PKG_BUILD_DIR:=$(BUILD_DIR)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
