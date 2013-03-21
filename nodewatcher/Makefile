@@ -24,7 +24,7 @@ define Package/nodewatcher
   CATEGORY:=Utilities
   TITLE:=Freifunk Oldenburg Nodewatcher
   URL:=http://freifunk-ol.de
-  DEPENDS:=+libuci +ip
+  DEPENDS:=+libuci +ip +libiw
 endef
 
 define Build/InstallDev
