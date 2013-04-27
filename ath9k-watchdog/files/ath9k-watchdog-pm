@@ -1,7 +1,7 @@
 #!/bin/sh
 # Save log
 mkdir -p /usr/lib/ath9k-watchdog
-UPLOAD_URL="http://[$(uci get configurator.@api[0].ipv6_address)%$(uci get configurator.@api[0].ipv6_interface)]/ath9k-crash/"
+UPLOAD_URL="http://[$(uci get configurator.@api[0].ipv6_address)%$(uci get configurator.@api[0].ipv6_interface)]/api/rest/event/"
 WGETC=$(which wget)
 
 
@@ -12,7 +12,7 @@ cd /usr/lib/ath9k-watchdog
 while [ 1 = 1 ]
 do
 	for f in $(ls .); do 
-        $WGETC -q $UPLOAD_URL?$(cat $f) -O - && rm $f
+		$WGETC -q $UPLOAD_URL"?object=router&object_id="$(uci get configurator.@crawl[0].router_id)"&data[action]=watchdog_ath9k_bug&"$(cat $f) -O - && rm $f
 	done
 	sleep 60
 	# If there are more than 15 files, assume that files cannot be uploaded

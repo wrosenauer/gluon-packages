@@ -17,7 +17,7 @@ do
 
         # Perform post-mortem dump
         tstmp=$(/bin/date +%s)
-        echo -n "hostname=${hostname}&tstmp=${tstmp}" > /tmp/$tstmp
+        echo -n "data[hostname]=${hostname}&data[tstmp]=${tstmp}" > /tmp/$tstmp
         
         # Move into upload directory
         mv  /tmp/$tstmp /usr/lib/ath9k-watchdog
