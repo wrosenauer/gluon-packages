@@ -12,7 +12,7 @@ cd /usr/lib/ath9k-watchdog
 while [ 1 = 1 ]
 do
 	for f in $(ls .); do 
-		$WGETC -q $UPLOAD_URL"?object=router&object_id="$(uci get configurator.@crawl[0].router_id)"&action=watchdog_ath9k_bug&"$(cat $f) -O - && rm $f
+		$WGETC -q $UPLOAD_URL"?api_key=$(uci get configurator.@api[0].api_key)&object=router&object_id="$(uci get configurator.@crawl[0].router_id)"&action=watchdog_ath9k_bug&"$(cat $f) -O - && rm $f
 	done
 	sleep 60
 	# If there are more than 15 files, assume that files cannot be uploaded
