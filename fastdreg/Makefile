@@ -33,4 +33,4 @@ define Package/ffol-fastdreg/install
 	$(CP) ./files/* $(1)/
 endef
 
-$(eval $(call BuildPackage,fastdreg))
+$(eval $(call BuildPackage,ffol-fastdreg))
