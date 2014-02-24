@@ -3,5 +3,5 @@ fastdenabled=$(uci get fastd.mesh_vpn.enabled)
 fastdregdone=$(uci get fastd.regdone)
 
 if [ $fastdenabled ] && [ ! $fastdregdone ]; then
-	/lib/ffol/fastdreg.sh
+	/lib/ffol/fastdreg/fastdreg.sh
 fi

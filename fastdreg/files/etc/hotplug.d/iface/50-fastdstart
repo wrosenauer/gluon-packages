@@ -1,5 +1,5 @@
 #!/bin/sh 
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
 	sleep 3
-	/lib/ffol/fastdreg.sh
+	/lib/ffol/fastdreg/fastdreg.sh
 }
