@@ -30,7 +30,14 @@ define Build/Compile
 endef
 
 define Package/ffol-fastdreg/install
-	$(CP) ./files/* $(1)/
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) files/fastdreg.init $(1)/etc/init.d/fastdreg
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface/
+	$(INSTALL_DATA) files/etc/hotplug.d/iface/50-fastdstart $(1)/etc/hotplug.d/iface/
+	$(INSTALL_DIR) $(1)/lib/ffol/fastdreg/
+	$(INSTALL_BIN) files/lib/ffol/fastdreg/fastdreg.sh $(1)/lib/ffol/fastdreg/
+	$(INSTALL_DIR) $(1)/etc/config/
+	$(INSTALL_CONF) files/fastdreg.config $(1)/etc/config/fastdreg
 endef
 
 $(eval $(call BuildPackage,ffol-fastdreg))

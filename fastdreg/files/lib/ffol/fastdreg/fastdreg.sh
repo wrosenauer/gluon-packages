@@ -7,13 +7,13 @@ hostname=$(uci get system.@system[0].hostname)
 
 pubkey=$(/etc/init.d/fastd show_key mesh_vpn)
 
-regdone=$(uci get fastd.regdone)
+regdone=$(uci get fastdreg.ffol.regdone)
 
-if [ -z $regdone ]; then
+if [ $regdone ]; then
 
         reg=$(wget -T15 "$keysrv/reg.php?name=$hostname&key=$pubkey" -O -)
         if [ "$reg" == "regdone" ]; then
-                uci set fastd.regdone=1
+                uci set fastdreg.ffol.regdone=1
         fi
 
 fi
