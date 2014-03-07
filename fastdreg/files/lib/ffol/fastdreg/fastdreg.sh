@@ -14,6 +14,7 @@ if [ $regdone ]; then
         reg=$(wget -T15 "$keysrv/reg.php?name=$hostname&key=$pubkey" -O -)
         if [ "$reg" == "regdone" ]; then
                 uci set fastdreg.ffol.regdone=1
+		uci commit
         fi
 
 fi
