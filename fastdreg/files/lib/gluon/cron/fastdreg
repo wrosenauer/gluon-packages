@@ -1,1 +1,1 @@
-*/2 * * * * /lib/ffol/fastdreg/fastdreg.sh
+* * * * * /lib/ffol/fastdreg/fastdreg.sh
