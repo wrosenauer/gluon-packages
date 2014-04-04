@@ -34,7 +34,7 @@ define Package/ffol-fastdreg/install
 	$(INSTALL_BIN) files/fastdreg.init $(1)/etc/init.d/fastdreg
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface/
 	$(INSTALL_DATA) files/etc/hotplug.d/iface/50-fastdstart $(1)/etc/hotplug.d/iface/
-        $(INSTALL_DATA) files/lib/gluon/cron/fastdreg $(1)/lib/gluon/cron/fastdreg
+	$(INSTALL_DATA) files/lib/gluon/cron/fastdreg $(1)/lib/gluon/cron/fastdreg
 	$(INSTALL_DIR) $(1)/lib/ffol/fastdreg/
 	$(INSTALL_BIN) files/lib/ffol/fastdreg/fastdreg.sh $(1)/lib/ffol/fastdreg/
 	$(INSTALL_DIR) $(1)/etc/config/
