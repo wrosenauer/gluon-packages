@@ -12,6 +12,7 @@ define Package/ffol-nodewatcher
   SECTION:=daemon
   CATEGORY:=Freifunk Oldenburg
   TITLE:=Provides status data for netmon 
+  DEPENDS:=+bridge-utils
 endef
 
 define Package/ffol-nodewatcher/description
