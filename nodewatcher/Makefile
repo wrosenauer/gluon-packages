@@ -1,40 +1,40 @@
-#
-# Copyright (C) 2006-2010 OpenWrt.org
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
-
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=nodewatcher
-PKG_VERSION:=2013-02-13
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=git://freifunk-ol.de/ffol/software/nodewatcher.git
-PKG_SOURCE:=$(PKG_NAME).tar.gz
-PKG_SOURCE_VERSION:=HEAD
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)
+PKG_NAME:=ffol-nodewatcher
+PKG_VERSION:=30
+PKG_RELEASE:=1
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
+PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/nodewatcher
-  SECTION:=utilities
-  CATEGORY:=Utilities
-  TITLE:=Freifunk Oldenburg Nodewatcher
-  URL:=http://freifunk-ol.de
-  DEPENDS:=+libuci +ip +libiw
+define Package/ffol-nodewatcher
+  SECTION:=daemon
+  CATEGORY:=Freifunk Oldenburg
+  TITLE:=Provides status data for netmon 
 endef
 
-define Build/InstallDev
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/nodewatcher $(1)/usr/bin/
+define Package/ffol-nodewatcher/description
+	Provides status data for netmon
 endef
 
-define Package/nodewatcher/install
-	$(INSTALL_DIR) $(1)/usr/bin
-	$(CP) $(PKG_BUILD_DIR)/nodewatcher $(1)/usr/bin/
+define Build/Prepare
+	mkdir -p $(PKG_BUILD_DIR)
 endef
 
-$(eval $(call BuildPackage,nodewatcher))
+define Build/Configure
+endef
+
+define Build/Compile
+endef
+
+define Package/ffol-nodewatcher/install
+	$(INSTALL_DIR) $(1)/lib/gluon/cron/
+	$(INSTALL_DATA) files/lib/gluon/cron/nodewatcher $(1)/lib/gluon/cron/nodewatcher
+	$(INSTALL_DIR) $(1)/lib/ffol/nodewatcher/
+	$(INSTALL_BIN) files/lib/ffol/nodewatcher/nodewatcher.sh $(1)/lib/ffol/nodewatcher/
+	$(INSTALL_DIR) $(1)/etc/config/
+	$(INSTALL_CONF) files/nodewatcher.config $(1)/etc/config/nodewatcher
+endef
+
+$(eval $(call BuildPackage,ffol-nodewatcher))
