@@ -82,7 +82,8 @@ assign_router() {
 	
 	#Choose right login String
 	#Here maybe a ; to much at the end..??
-	login_strings=$(awk '{ mac=toupper($1); gsub(":", "", mac); printf mac ";" }' /sys/class/net/br-mesh/address /sys/class/net/eth0/address /sys/class/net/ath0/address 2> /dev/null)
+	login_strings=$(awk '{ mac=toupper($1); gsub(":", "", mac); printf mac ";" }' /sys/class/net/br-client/address 
+/sys/class/net/eth0/address /sys/class/net/ath0/address 2> /dev/null)
 	ergebnis=$(wget -T $API_TIMEOUT -q -O - "http://$netmon_api/api_csv_configurator.php?section=test_login_strings&login_strings=$login_strings")
 	router_auto_assign_login_string=${ergebnis#*;}
 	ergebnis=${ergebnis%;*}
