@@ -59,32 +59,18 @@ crawl() {
 
     err "`date`: Collecting version information"
 	
-    batman_adv_version=$(cat /sys/module/batman_adv/version)
+	batman_adv_version=$(cat /sys/module/batman_adv/version)
 	kernel_version=$(uname -r)
 	fastd_version=$(fastd -v | awk '{ print $2 }')
 	nodewatcher_version=$SCRIPT_VERSION
 
-    # example for /etc/openwrt_release:
-    #DISTRIB_ID="OpenWrt"
-    #DISTRIB_RELEASE="Attitude Adjustment"
-    #DISTRIB_REVISION="r35298"
-    #DISTRIB_CODENAME="attitude_adjustment"
-    #DISTRIB_TARGET="atheros/generic"
-    #DISTRIB_DESCRIPTION="OpenWrt Attitude Adjustment 12.09-rc1"
-	. /etc/openwrt_release
-    distname=$DISTRIB_ID
-    distversion=$DISTRIB_RELEASE
+	distname="gluon"
+	distversion="$(cat /lib/gluon/gluon-version)"
 
-    # example for /etc/firmware_release:
-    #FIRMWARE_VERSION="95f36685e7b6cbf423f02cf5c7f1e785fd4ccdae-dirty"
-    #RELEASE_DATE="build date: Di 29. Jan 19:33:34 CET 2013"
-    #FIRMWARE_REVISION="build date: Di 29. Jan 19:33:34 CET 2013"
-    #OPENWRT_CORE_REVISION="35298"
-    #OPENWRT_FEEDS_PACKAGES_REVISION="35298"
 	FIRMWARE_VERSION="$(cat /lib/gluon/release)"
 	SYSTEM_DATA="<status>online</status><hostname>$hostname</hostname><distname>$distname</distname><distversion>$distversion</distversion>$cpu$memory$load$uptime<local_time>$local_time</local_time><batman_advanced_version>$batman_adv_version</batman_advanced_version><kernel_version>$kernel_version</kernel_version><fastd_version>$fastd_version</fastd_version><nodewatcher_version>$nodewatcher_version</nodewatcher_version><firmware_version>$FIRMWARE_VERSION</firmware_version><firmware_revision>$FIRMWARE_REVISION</firmware_revision><openwrt_core_revision>$OPENWRT_CORE_REVISION</openwrt_core_revision><openwrt_feeds_packages_revision>$OPENWRT_FEEDS_PACKAGES_REVISION</openwrt_feeds_packages_revision>"
 
-    err "`date`: Collecting information from network interfaces"
+	err "`date`: Collecting information from network interfaces"
 
 	#Get interfaces
 	#IFACES=`cat /proc/net/dev | awk -F: '!/\|/ { gsub(/[[:space:]]*/, "", $1); split($2, a, " "); printf("%s=%s=%s ", $1, a[1], a[9]) }'`
