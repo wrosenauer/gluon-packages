@@ -174,7 +174,7 @@ crawl() {
     err "`date`: Collecting information about conected clients"
 	#CLIENTS
 
-    client_count=$(($(batctl tl|wc -l) - 2))
+    client_count=$(($(batctl tl|wc -l) - 3))
 
     err "`date`: Putting all information into a XML-File and save it at "$SCRIPT_DATA_FILE
 
