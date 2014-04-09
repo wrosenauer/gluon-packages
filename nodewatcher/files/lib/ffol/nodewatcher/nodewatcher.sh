@@ -173,13 +173,8 @@ crawl() {
     fi
     err "`date`: Collecting information about conected clients"
 	#CLIENTS
-    SEDDEV=$(brctl showstp $MESH_INTERFACE | awk '/\([0-9]\)/ {
-            sub("\\(", "", $0)
-            sub("\\)", "", $0)
-            print "s/^  "$2"/"$1"/;"
-        }')
 
-    client_count=$(brctl showmacs $MESH_INTERFACE | sed -e "$SEDDEV" | egrep -c "(${CLIENT_INTERFACES// /|}).*no")
+    client_count=$(($(batctl tl|wc -l) - 2))
 
     err "`date`: Putting all information into a XML-File and save it at "$SCRIPT_DATA_FILE
 
