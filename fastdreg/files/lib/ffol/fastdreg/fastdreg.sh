@@ -1,7 +1,7 @@
 #!/bin/sh
 . /lib/functions.sh
 
-keysrv="http://vpn01.freifunk-ol.de"
+keysrv="http://37.120.161.165"
 
 hostname=$(uci get system.@system[0].hostname)
 
