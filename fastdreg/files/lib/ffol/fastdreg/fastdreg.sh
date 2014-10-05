@@ -1,7 +1,7 @@
 #!/bin/sh
 . /lib/functions.sh
 
-keysrv="http://37.120.161.165"
+keysrv="http://freifunk-ansbach.de"
 
 hostname=$(uci get system.@system[0].hostname)
 
