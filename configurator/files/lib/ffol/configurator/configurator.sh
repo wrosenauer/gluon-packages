@@ -40,7 +40,7 @@ if [ "$API_IPV6_ADRESS" = "1" -a "$API_IPV4_ADRESS" = "1" ]; then
 	PREFIX=$(uci get network.local_node_route6.target | cut -d: -f 1-4)
 	COMMUNITY_ESSID=$(uci get wireless.client_radio0.ssid)
 
-	netmon_ipaddr="$PREFIX::42"
+	netmon_ipaddr="${PREFIX%:}::42"
 	netmon_hostname="netmon.$COMMUNITY_ESSID"
 
 	hosts_ipaddr=$(grep -e $netmon_hostname /etc/hosts | awk '{ print $1 }')	
