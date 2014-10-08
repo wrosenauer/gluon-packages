@@ -25,12 +25,6 @@ fi
 
 API_RETRY=$(($API_RETRY - 1))
 
-if [[ $API_IPV4_ADRESS != "1" ]]; then
-	netmon_api=$API_IPV4_ADRESS
-else
-	netmon_api=$API_IPV6_ADRESS
-fi
-
 if [ $SCRIPT_ERROR_LEVEL -gt "1" ]; then
 	err() {
 		echo "$(date) [configurator]: $1" >> $SCRIPT_LOGFILE
@@ -39,6 +33,33 @@ else
 	err() {
 		:
 	}
+fi
+
+if [ "$API_IPV6_ADRESS" = "1" -a "$API_IPV4_ADRESS" = "1" ]; then
+	# autoconfiguration
+	PREFIX=$(uci get network.local_node_route6.target | cut -d: -f 1-4)
+	COMMUNITY_ESSID=$(uci get wireless.client_radio0.ssid)
+
+	netmon_ipaddr="$PREFIX::42"
+	netmon_hostname="netmon.$COMMUNITY_ESSID"
+
+	hosts_ipaddr=$(grep -e $netmon_hostname /etc/hosts | awk '{ print $1 }')	
+
+	if [ "$hosts_ipaddr" = "$netmon_ipaddr" ]; then
+		err "ipaddr in /etc/hosts already correct"
+	else
+		err "fixing netmon ipaddr in /etc/hosts ..."
+		sed -i -e "/$netmon_hostname/d" /etc/hosts
+		echo $netmon_ipaddr $netmon_hostname >> /etc/hosts
+	fi
+
+	API_IPV6_ADRESS=$netmon_hostname
+fi
+
+if [[ $API_IPV4_ADRESS != "1" ]]; then
+	netmon_api=$API_IPV4_ADRESS
+else
+	netmon_api=$API_IPV6_ADRESS
 fi
 
 sync_hostname() {
