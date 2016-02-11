@@ -29,8 +29,8 @@ define Build/Compile
 endef
 
 define Package/ffol-nodewatcher/install
-	$(INSTALL_DIR) $(1)/lib/gluon/cron/
-	$(INSTALL_DATA) files/lib/gluon/cron/nodewatcher $(1)/lib/gluon/cron/nodewatcher
+	$(INSTALL_DIR) $(1)/usr/lib/micron.d/
+	$(INSTALL_DATA) files/lib/gluon/cron/nodewatcher $(1)/usr/lib/micron.d/nodewatcher
 	$(INSTALL_DIR) $(1)/lib/ffol/nodewatcher/
 	$(INSTALL_BIN) files/lib/ffol/nodewatcher/nodewatcher.sh $(1)/lib/ffol/nodewatcher/
 	$(INSTALL_DIR) $(1)/etc/config/

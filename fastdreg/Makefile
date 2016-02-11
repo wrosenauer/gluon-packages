@@ -30,8 +30,8 @@ define Build/Compile
 endef
 
 define Package/ffol-fastdreg/install
-	$(INSTALL_DIR) $(1)/lib/gluon/cron/
-	$(INSTALL_DATA) files/lib/gluon/cron/fastdreg $(1)/lib/gluon/cron/fastdreg
+	$(INSTALL_DIR) $(1)/usr/lib/micron.d/
+	$(INSTALL_DATA) files/lib/gluon/cron/fastdreg $(1)/usr/lib/micron.d/fastdreg
 	$(INSTALL_DIR) $(1)/lib/ffol/fastdreg/
 	$(INSTALL_BIN) files/lib/ffol/fastdreg/fastdreg.sh $(1)/lib/ffol/fastdreg/
 	$(INSTALL_DIR) $(1)/etc/config/
