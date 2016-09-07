@@ -11,7 +11,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/ffol-nodewatcher
   SECTION:=daemon
   CATEGORY:=Freifunk Oldenburg
-  TITLE:=Provides status data for netmon 
+  TITLE:=Provides status data for netmon
 endef
 
 define Package/ffol-nodewatcher/description
