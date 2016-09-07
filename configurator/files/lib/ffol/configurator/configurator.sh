@@ -43,7 +43,7 @@ if [ "$API_IPV6_ADRESS" = "1" -a "$API_IPV4_ADRESS" = "1" ]; then
 	netmon_ipaddr="${PREFIX%:}::42"
 	netmon_hostname="netmon.$COMMUNITY_ESSID"
 
-	hosts_ipaddr=$(grep -e $netmon_hostname /etc/hosts | awk '{ print $1 }')	
+	hosts_ipaddr=$(grep -e $netmon_hostname /etc/hosts | awk '{ print $1 }')
 
 	if [ "$hosts_ipaddr" = "$netmon_ipaddr" ]; then
 		err "ipaddr in /etc/hosts already correct"
@@ -67,12 +67,12 @@ sync_hostname() {
 	api_return=$(wget -T $API_TIMEOUT -q -O - "http://$netmon_api/api_csv_configurator.php?section=get_hostname&authentificationmethod=$CRAWL_METHOD&nickname=$CRAWL_NICKNAME&password=$CRAWL_PASSWORD&router_auto_update_hash=$CRAWL_UPDATE_HASH&router_id=$CRAWL_ROUTER_ID")
 	ret=${api_return%%,*}
 	if [ "$ret" != "success" ]; then
-		err "Ther was an error fetching the hostname"
+		err "There was an error fetching the hostname"
 		exit 0
 	elif [ "$ret" = "success" ]; then
 		netmon_hostname=${api_return%,*}
 		netmon_hostname=${netmon_hostname#*,}
-		
+
 		#check for valid hostname as specified in rfc 1123
 		#see http://stackoverflow.com/a/3824105
 		regex='^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])'
@@ -98,12 +98,45 @@ sync_hostname() {
 	fi
 }
 
+sync_coords () {
+	err "Syncing coordinates"
+	api_return=$(wget -T $API_TIMEOUT -q -O - "http://$netmon_api/api_csv_configurator.php?section=get_coords&router_id=$CRAWL_ROUTER_ID")
+	ret=${api_return%%,*}
+	if [ "$ret" != "success" ]; then
+		err "There was an error fetching the coordinates"
+		return 1
+	fi
+	coords=${api_return/success,/}
+	if echo $coords | grep -q '^0,0,\?$' ; then
+		err "Netmon has no coordinates"
+		return 0
+	fi
+	if echo $coords | egrep -qo '^[+-]?[0-9]+\.[0-9]+,[+-]?[0-9]+\.[0-9]+'; then
+		GET_NETMON_COORDS=`uci -q get gluon-node-info.@location[0].get_netmon_coords`
+		if [ "x$GET_NETMON_COORDS" != "x0" ]; then
+			LATITUDE=`uci -q get gluon-node-info.@location[0].latitude`
+			LONGITUDE=`uci -q get gluon-node-info.@location[0].longitude`
+			SHARE_LOCATION=`uci -q get gluon-node-info.@location[0].share_location`
+			if [ "x$SHARE_LOCATION" == "x1" -o "x$LATITUDE" == "x" -o "x$LONGITUDE" == "x" ]; then
+				eval `echo $coords | awk -F, '{ print "lat="$1; print "long="$2; }'`
+				if [ "x$SHARE_LOCATION" != "x1" -o "x$LATITUDE" != "x$lat" -o "x$LONGITUDE" != "x$long" ]; then
+					uci -q set gluon-node-info.@location[0].share_location=1
+					uci -q set gluon-node-info.@location[0].get_netmon_coords=1
+					uci -q set gluon-node-info.@location[0].latitude=$lat
+					uci -q set gluon-node-info.@location[0].longitude=$long
+					uci -q commit
+				fi
+			fi
+		fi
+	fi
+}
+
 assign_router() {
 	hostname=`cat /proc/sys/kernel/hostname`
-	
+
 	#Choose right login String
 	#Here maybe a ; to much at the end..??
-	login_strings=$(awk '{ mac=toupper($1); gsub(":", "", mac); printf mac ";" }' /sys/class/net/br-client/address 
+	login_strings=$(awk '{ mac=toupper($1); gsub(":", "", mac); printf mac ";" }' /sys/class/net/br-client/address
 /sys/class/net/eth0/address /sys/class/net/ath0/address 2> /dev/null)
 	ergebnis=$(wget -T $API_TIMEOUT -q -O - "http://$netmon_api/api_csv_configurator.php?section=test_login_strings&login_strings=$login_strings")
 	router_auto_assign_login_string=${ergebnis#*;}
@@ -164,14 +197,14 @@ autoadd_ipv6_address() {
 			uci set configurator.@netmon[0].autoadd_ipv6_address='0'
 			uci commit
 			err "IPv6 Autoadd has been disabled cause it is no longer necesarry"
-		else 
+		else
 			err "The IPv6 address already exists in Netmon on another router $routerid"
 		fi
 	fi
 }
 
 if [ $CRAWL_METHOD == "login" ]; then
-	err "Authentification method is: username and passwort"
+	err "Authentification method is: username and password"
 elif [ $CRAWL_METHOD == "hash" ]; then
 	err "Authentification method: autoassign and hash"
 	err "Checking if the router is already assigned to a router in Netmon"
@@ -191,3 +224,6 @@ fi
 if [[ $SCRIPT_SYNC_HOSTNAME = "1" ]]; then
 	sync_hostname
 fi
+
+sync_coords
+
