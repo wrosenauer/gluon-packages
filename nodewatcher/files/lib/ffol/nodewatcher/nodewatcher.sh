@@ -50,10 +50,13 @@ crawl() {
 		/^Buffers/ { printf "<memory_buffering>"$2"</memory_buffering>" }
 		/^MemFree/ { printf "<memory_free>"$2"</memory_free>" }
 		' /proc/meminfo)
-	if grep "^flags.*hypervisor" /proc/cpuinfo >/dev/null; then
+	if grep "^flags.*hypervisor" /proc/cpuinfo >/dev/null; then # virtual
 		cpu=$(sort -u /proc/cpuinfo | awk -F': ' '/model name/ { printf "<cpu>"$2"</cpu>" }';
 		echo "<chipset>VM</chipset>")
-	else
+	elif grep "^flags.*fpu" /proc/cpuinfo >/dev/null; then # regular x86* hardware
+		cpu=$(sort -u /proc/cpuinfo | awk -F': ' '/model name/ { printf "<cpu>"$2"</cpu>" }';
+		echo "<chipset>generic</chipset>")
+	else # typical AP hardware
 		cpu=$(awk -F': ' '
 			/model/ { printf "<cpu>"$2"</cpu>" }
 			/system type/ { printf "<chipset>"$2"</chipset>" }
