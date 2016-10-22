@@ -38,7 +38,10 @@ fi
 if [ "$API_IPV6_ADRESS" = "1" -a "$API_IPV4_ADRESS" = "1" ]; then
 	# autoconfiguration
 	PREFIX=$(uci get network.local_node_route6.target | cut -d: -f 1-4)
-	COMMUNITY_ESSID=$(uci get wireless.client_radio0.ssid)
+	# systems w/o wireless (e.g. offloader) cannot detect FQDN
+	#COMMUNITY_ESSID=$(uci get wireless.client_radio0.ssid)
+	# therefore use saved site.json through gluon interface
+	COMMUNITY_ESSID=$(lua -e "print(require'gluon.site_config'.wifi24.ap.ssid)")
 
 	netmon_ipaddr="${PREFIX%:}::42"
 	netmon_hostname="netmon.$COMMUNITY_ESSID"
