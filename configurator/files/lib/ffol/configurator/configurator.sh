@@ -38,7 +38,10 @@ fi
 if [ "$API_IPV6_ADRESS" = "1" -a "$API_IPV4_ADRESS" = "1" ]; then
 	# autoconfiguration
 	PREFIX=$(uci get network.local_node_route6.target | cut -d: -f 1-4)
-	COMMUNITY_ESSID=$(uci get wireless.client_radio0.ssid)
+	# systems w/o wireless (e.g. offloader) cannot detect FQDN
+	#COMMUNITY_ESSID=$(uci get wireless.client_radio0.ssid)
+	# therefore use saved site.json through gluon interface
+	COMMUNITY_ESSID=$(lua -e "print(require'gluon.site_config'.wifi24.ap.ssid)")
 
 	netmon_ipaddr="${PREFIX%:}::42"
 	netmon_hostname="netmon.$COMMUNITY_ESSID"
@@ -189,14 +192,14 @@ autoadd_ipv6_address() {
 		uci set configurator.@netmon[0].autoadd_ipv6_address='0'
 		uci commit
 		err "The IPv6 address of the router $CRAWL_ROUTER_ID has been added to the router in Netmon"
-		err "IPv6 Autoadd has been disabled cause it is no longer necesarry"
+		err "IPv6 Autoadd has been disabled because it is no longer necessary"
 	else
 		routerid=${ergebnis##*,}
 		if [ "$routerid" == "$CRAWL_ROUTER_ID" ]; then
-			err "The IPv6 address already exists in Netmon on this router. Maybe because of a previos assignment"
+			err "The IPv6 address already exists in Netmon on this router. Maybe because of a previous assignment"
 			uci set configurator.@netmon[0].autoadd_ipv6_address='0'
 			uci commit
-			err "IPv6 Autoadd has been disabled cause it is no longer necesarry"
+			err "IPv6 Autoadd has been disabled because it is no longer necessary"
 		else
 			err "The IPv6 address already exists in Netmon on another router $routerid"
 		fi
